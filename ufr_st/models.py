@@ -24,7 +24,7 @@ class Etudiant(models.Model):
     identifiant = models.CharField(
         primary_key=True, unique=True, max_length=10)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    almuni_email = models.EmailField()
+    almuni_email = models.EmailField(null=True)
     alumni = models.BooleanField(default=False)
     telephone = models.CharField(max_length=15)
     filiere = models.ForeignKey(Filiere, on_delete=models.PROTECT)

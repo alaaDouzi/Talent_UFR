@@ -31,36 +31,36 @@ class Stage(models.Model):
         max_length=45, choices=Etat.choices, default=Etat.SUJET_EN_ATTENTE_VALIDATION)
     intitule = models.TextField()  # sujet stage
     description = models.TextField()
-    documents_sup = models.FileField()
+    documents_sup = models.FileField(null=True)
     date_debut = models.DateField()
     date_fin = models.DateField()
     # Jours et horaires de travail
-    date_debut_interruption = models.DateField()
-    date_fin_interruption = models.DateField()
+    date_debut_interruption = models.DateField(null=True)
+    date_fin_interruption = models.DateField(null=True)
     nombre_heure_total = models.IntegerField()
     remunere = models.BooleanField()
-    remuneration = models.IntegerField()
+    remuneration = models.IntegerField(null=True)
     modalites_versements = models.CharField(
-        max_length=15, choices=Modalites_versements.choices, default=Modalites_versements.VIREMENT)
-    avantage = models.TextField()
+        max_length=15, choices=Modalites_versements.choices, default=Modalites_versements.NON_CONNU)
+    avantage = models.TextField(blank=True)
 
     date_creation = models.DateTimeField(default=timezone.now)
 
-    date_validation = models.DateTimeField()
-    remarque_reserve = models.TextField()
-    raison_refus = models.TextField()
+    date_validation = models.DateTimeField(null=True)
+    remarque_reserve = models.TextField(null=True)
+    raison_refus = models.TextField(null=True)
 
-    date_confirmarion = models.DateTimeField()
+    date_confirmarion = models.DateTimeField(null=True)
 
-    date_prise_en_charge_convention = models.DateTimeField()
+    date_prise_en_charge_convention = models.DateTimeField(null=True)
 
-    date_annulation_entreprise = models.DateTimeField()
-    raison_annulation_entreprise = models.DateTimeField()
+    date_annulation_entreprise = models.DateTimeField(null=True)
+    raison_annulation_entreprise = models.DateTimeField(null=True)
 
-    date_soutenance = models.DateTimeField()
+    date_soutenance = models.DateTimeField(null=True)
     # session soutenance
 
-    date_archive = models.DateTimeField()
+    date_archive = models.DateTimeField(null=True)
 
     entreprise = models.ForeignKey(
         Organisme_Accueil, on_delete=models.RESTRICT)
@@ -71,7 +71,7 @@ class Stage(models.Model):
     ayant_propose_stage = models.ForeignKey(
         Proposeur_stage, on_delete=models.RESTRICT)
     etudiant = models.ForeignKey(Etudiant, on_delete=models.RESTRICT)
-    tuteur = models.ForeignKey(Tuteur, on_delete=models.RESTRICT)
+    tuteur = models.ForeignKey(Tuteur, on_delete=models.RESTRICT, null=True)
     list_mot_cle = models.ManyToManyField(Mot_cle)
 
 

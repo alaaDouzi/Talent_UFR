@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 class Organisme_Accueil(models.Model):
     nom = models.TextField(unique=True)
     adresse = models.TextField()
-    codePostal = models.CharField(max_length=5)
+    codePostal = models.CharField(max_length=10)
     ville = models.TextField()
     pays = models.TextField()
     num_siret = models.TextField()
