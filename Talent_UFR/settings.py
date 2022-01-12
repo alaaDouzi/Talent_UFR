@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'ufr_st',
     'entreprise',
     'stage',
+    # api
+    'etudiant'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +84,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+"""
+'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dchmh3p3b09js0',
+        'USER': 'fmzcljafvxpdjr',
+        'PASSWORD': '5cb9bc19eb7276f9398d157b04b814efe9a1ae3b4cd5eaf54b85f19a40351bbe',
+        'HOST': 'ec2-18-203-64-130.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432',
+    },
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
