@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from stage.models import Stage
-from ufr_st.models import Etudiant, Mot_cle
+from ufr_st.models import Etudiant, Mot_cle, Tuteur
 from entreprise.models import Organisme_Accueil, Lieu, Responsable_administratif, Maitre_stage, Proposeur_stage
 
 
@@ -63,7 +63,13 @@ class EtudiantSerializer(serializers.ModelSerializer):
         model = Etudiant
         fields = ['identifiant', 'user', 'almuni_email', 'alumni', 'telephone',
                   'filiere', 'adresse', 'securite_sociale', 'num_securite_sociale',
-                  'compagnie_responsabilite_civile', 'num_responsabilite_civile', 'entreprise']
+                  'compagnie_responsabilite_civile', 'num_responsabilite_civile', 'entreprise', 'user']
+
+
+class TuteurSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tuteur
+        fields = ['id', 'nom', 'prenom', 'email', 'telephone']
 
 
 class MotCleSerializer(serializers.ModelSerializer):

@@ -93,6 +93,11 @@ DATABASES = {
         'HOST': 'ec2-18-203-64-130.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     },
+
+'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 """
 
 # Password validation
