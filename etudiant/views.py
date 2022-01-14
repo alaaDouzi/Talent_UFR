@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 # import request
-from stage.models import Stage
+from stage.models import Stage, Etat
 from ufr_st.models import Mot_cle, Etudiant
 from entreprise.models import Organisme_Accueil
 from .serializers import StageSerializer, OrganismeAccueilSerializer, LieuSerializer, ResponsableAdministratifSerializer, ProposeurStageSerializer, MaitreStageSerializer, StageCreateSerializer, MotCleSerializer, TuteurSerializer
@@ -152,6 +152,30 @@ def create_stage(request):
             transaction.savepoint_rollback(sid)
             return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         # endregion
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def update_stage(request, id):
+    if request.method == 'PUT':
+        stage_data = request.data
+
+        try:
+            stage = Stage.objects.get(id=id)
+        except Stage.DoesNotExist:
+            error_message = f"Stage with id : {id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        stage_data["etat"] = Etat.SUJET_EN_ATTENTE_VALIDATION
+        stage_serializer = StageSerializer(stage,
+                                           data=stage_data)
+
+        if stage_serializer.is_valid():
+            stage_serializer.save()
+            return Response(stage_serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 

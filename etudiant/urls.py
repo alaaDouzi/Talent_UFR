@@ -3,6 +3,7 @@ from etudiant import views
 
 urlpatterns = [
     path('stage', views.create_stage),
+    path('stage/<int:id>', views.update_stage),
     path('myStages', views.my_stages),
     path('organisme_accueil', views.organisme_accueil),
 ]
