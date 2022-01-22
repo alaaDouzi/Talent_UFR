@@ -9,15 +9,15 @@ class StageSerializer(serializers.ModelSerializer):
         model = Stage
         fields = ['id', 'etat', 'intitule', 'description', 'date_debut', 'date_fin',
                   'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
-                  'remunere', 'remuneration', 'modalites_versements', 'avantage', 'date_creation', 'date_validation', 'remarque_reserve',  'raison_refus', 'date_confirmarion', 'date_prise_en_charge_convention', 'date_annulation_entreprise', 'raison_annulation_entreprise', 'date_soutenance']
+                  'remunere', 'en_france', 'confidentiel', 'remuneration', 'modalites_versements', 'avantage', 'date_creation', 'date_validation', 'remarque_reserve',  'raison_refus', 'date_confirmarion', 'date_prise_en_charge_convention', 'date_annulation_entreprise', 'raison_annulation_entreprise', 'date_soutenance']
 
 
 class StageCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['id', 'intitule', 'description', 'date_debut', 'date_fin',
-                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
-                  'remunere', 'remuneration', 'modalites_versements', 'avantage', 'entreprise', 'confidentiel',
+                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',   'remunere', 'en_france', 'confidentiel',
+                  'remuneration', 'modalites_versements', 'avantage', 'entreprise',
                   'representant_etablissement', 'maitre_stage', 'lieu', 'ayant_propose_stage', 'etudiant']
 
 
@@ -26,7 +26,7 @@ class StageUpdateSerializer(serializers.ModelSerializer):
         model = Stage
         fields = ['intitule', 'description', 'date_debut', 'date_fin',
                   'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
-                  'remunere', 'remuneration', 'confidentiel', 'modalites_versements', 'avantage']
+                  'remunere', 'remuneration', 'en_france', 'confidentiel', 'modalites_versements', 'avantage']
 
 
 class OrganismeAccueilSerializer(serializers.ModelSerializer):

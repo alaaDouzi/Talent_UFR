@@ -40,6 +40,7 @@ class Stage(models.Model):
     date_fin_interruption = models.DateField(null=True)
     nombre_heure = models.IntegerField()  # nombre_heure par semaine
     remunere = models.BooleanField()
+    en_france = models.BooleanField(default=True)
     confidentiel = models.BooleanField(default=False)
     remuneration = models.IntegerField(null=True)
     modalites_versements = models.CharField(
