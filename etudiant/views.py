@@ -8,7 +8,7 @@ from rest_framework.parsers import JSONParser
 from stage.models import Stage, Etat
 from ufr_st.models import Mot_cle, Etudiant
 from entreprise.models import Organisme_Accueil
-from .serializers import StageSerializer, OrganismeAccueilSerializer, LieuSerializer, ResponsableAdministratifSerializer, ProposeurStageSerializer, MaitreStageSerializer, StageCreateSerializer, MotCleSerializer, TuteurSerializer
+from .serializers import StageSerializer, OrganismeAccueilSerializer, LieuSerializer, ResponsableAdministratifSerializer, ProposeurStageSerializer, MaitreStageSerializer, StageCreateSerializer, MotCleSerializer, TuteurSerializer, StageUpdateSerializer
 # Create your views here.
 
 
@@ -168,8 +168,8 @@ def update_stage(request, id):
             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
 
         stage_data["etat"] = Etat.SUJET_EN_ATTENTE_VALIDATION
-        stage_serializer = StageSerializer(stage,
-                                           data=stage_data)
+        stage_serializer = StageUpdateSerializer(stage,
+                                                 data=stage_data)
 
         if stage_serializer.is_valid():
             stage_serializer.save()
