@@ -51,7 +51,7 @@ class MotCleSerializer(serializers.ModelSerializer):
         fields = ['id', 'designation', 'filiere']
 
 
-class StageUpdateSerializer(serializers.ModelSerializer):
+class StageValidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['etat', 'date_validation']
@@ -67,6 +67,12 @@ class StageRefusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['etat', 'date_validation', 'raison_refus']
+
+
+class StageAttributionTuteurSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stage
+        fields = ['etat', 'tuteur']
 
 
 class EtudiantSerializer(serializers.ModelSerializer):

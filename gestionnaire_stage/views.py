@@ -5,9 +5,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 # import request
 from stage.models import Stage, Etat
-from ufr_st.models import Mot_cle, Etudiant
+from ufr_st.models import Mot_cle, Etudiant, Tuteur
 from entreprise.models import Organisme_Accueil
-from .serializers import StageSerializer, OrganismeAccueilSerializer, ProposeurStageSerializer, MaitreStageSerializer, MotCleSerializer, TuteurSerializer, StageUpdateSerializer, StageRefusSerializer, StageSousReserveSerializer
+from .serializers import StageAttributionTuteurSerializer, StageSerializer, OrganismeAccueilSerializer, ProposeurStageSerializer, MaitreStageSerializer, MotCleSerializer, TuteurSerializer, StageValidateSerializer, StageRefusSerializer, StageSousReserveSerializer
 
 
 @api_view(['GET'])
@@ -66,7 +66,7 @@ def validate_stage(request, id):
             error_message = f"Stage with id : {id} doesn\'t exist"
             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
 
-        stage_serializer = StageUpdateSerializer(
+        stage_serializer = StageValidateSerializer(
             stage, data={"etat": Etat.SUJET_VALIDE, "date_validation": datetime.now()})
 
         if stage_serializer.is_valid():
@@ -119,6 +119,42 @@ def sous_reserve_stage(request, id):
 
         stage_serializer = StageSousReserveSerializer(
             stage, data=sous_reserve_data)
+
+        if stage_serializer.is_valid():
+            stage_serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def attribuer_tuteur(request, id):
+    if request.method == 'PUT':
+        stage_data = request.data
+        tuteur_id = request.data.get("tuteurId")
+
+        try:
+            stage = Stage.objects.get(id=id)
+        except Stage.DoesNotExist:
+            error_message = f"Stage with id : {id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        if tuteur_id == None:
+            return Response({"message": "system can't find 'tuteurId' in the body of the request"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            Tuteur.objects.get(id=tuteur_id)
+        except Tuteur.DoesNotExist:
+            error_message = f"Tuteur with id : {tuteur_id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        stage_data["etat"] = Etat.STAGE_VALIDE
+        stage_data["tuteur"] = tuteur_id
+
+        stage_serializer = StageAttributionTuteurSerializer(
+            stage, data=stage_data)
 
         if stage_serializer.is_valid():
             stage_serializer.save()

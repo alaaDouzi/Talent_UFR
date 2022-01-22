@@ -1,4 +1,5 @@
 from django.db import models
+from sqlalchemy import false
 from ufr_st.models import Etudiant, Mot_cle, Tuteur
 from entreprise.models import Organisme_Accueil, Responsable_administratif, Lieu, Maitre_stage, Proposeur_stage
 from django.utils import timezone
@@ -50,8 +51,8 @@ class Stage(models.Model):
     date_creation = models.DateTimeField(default=timezone.now)
 
     date_validation = models.DateTimeField(null=True)
-    remarque_reserve = models.TextField(null=True)
-    raison_refus = models.TextField(null=True)
+    remarque_reserve = models.TextField(null=True, blank=False)
+    raison_refus = models.TextField(null=True, blank=False)
 
     date_confirmarion = models.DateTimeField(null=True)
 
