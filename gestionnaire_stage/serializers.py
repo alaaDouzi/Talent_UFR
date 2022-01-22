@@ -39,14 +39,6 @@ class ProposeurStageSerializer(serializers.ModelSerializer):
                   'email', 'entreprise']
 
 
-class EtudiantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Etudiant
-        fields = ['identifiant', 'user', 'almuni_email', 'alumni', 'telephone',
-                  'filiere', 'adresse', 'securite_sociale', 'num_securite_sociale',
-                  'compagnie_responsabilite_civile', 'num_responsabilite_civile', 'entreprise', 'user']
-
-
 class TuteurSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tuteur
@@ -62,6 +54,28 @@ class MotCleSerializer(serializers.ModelSerializer):
 class StageUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
+        fields = ['etat']
+
+
+class StageSousReserveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stage
         fields = ['intitule', 'description', 'date_debut', 'date_fin',
                   'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
                   'remunere', 'remuneration', 'en_france', 'confidentiel', 'modalites_versements', 'avantage']
+
+
+class StageRefusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stage
+        fields = ['intitule', 'description', 'date_debut', 'date_fin',
+                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
+                  'remunere', 'remuneration', 'en_france', 'confidentiel', 'modalites_versements', 'avantage']
+
+
+class EtudiantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Etudiant
+        fields = ['identifiant', 'user', 'almuni_email', 'alumni', 'telephone',
+                  'filiere', 'adresse', 'securite_sociale', 'num_securite_sociale',
+                  'compagnie_responsabilite_civile', 'num_responsabilite_civile', 'entreprise', 'user']
