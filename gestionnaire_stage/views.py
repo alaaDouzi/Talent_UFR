@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from rest_framework import status
-from django.db import transaction
+from datetime import datetime
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.parsers import JSONParser
 # import request
 from stage.models import Stage, Etat
 from ufr_st.models import Mot_cle, Etudiant
@@ -68,7 +67,33 @@ def validate_stage(request, id):
             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
 
         stage_serializer = StageUpdateSerializer(
-            stage, data={"etat": Etat.SUJET_VALIDE})
+            stage, data={"etat": Etat.SUJET_VALIDE, "date_validation": datetime.now()})
+
+        if stage_serializer.is_valid():
+            stage_serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def refuser_stage(request, id):
+    if request.method == 'PUT':
+        refus_data = request.data
+
+        try:
+            stage = Stage.objects.get(id=id)
+        except Stage.DoesNotExist:
+            error_message = f"Stage with id : {id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        refus_data["etat"] = Etat.SUJET_REJETE
+        refus_data["date_validation"] = datetime.now()
+
+        stage_serializer = StageRefusSerializer(
+            stage, data=refus_data)
 
         if stage_serializer.is_valid():
             stage_serializer.save()
