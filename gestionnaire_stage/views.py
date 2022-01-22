@@ -102,3 +102,28 @@ def refuser_stage(request, id):
             return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def sous_reserve_stage(request, id):
+    if request.method == 'PUT':
+        sous_reserve_data = request.data
+
+        try:
+            stage = Stage.objects.get(id=id)
+        except Stage.DoesNotExist:
+            error_message = f"Stage with id : {id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        sous_reserve_data["etat"] = Etat.SUJET_SOUS_REVERVE
+
+        stage_serializer = StageSousReserveSerializer(
+            stage, data=sous_reserve_data)
+
+        if stage_serializer.is_valid():
+            stage_serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)

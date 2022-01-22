@@ -54,23 +54,19 @@ class MotCleSerializer(serializers.ModelSerializer):
 class StageUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
-        fields = ['etat']
+        fields = ['etat', 'date_validation']
 
 
 class StageSousReserveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
-        fields = ['intitule', 'description', 'date_debut', 'date_fin',
-                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
-                  'remunere', 'remuneration', 'en_france', 'confidentiel', 'modalites_versements', 'avantage']
+        fields = ['etat', 'remarque_reserve']
 
 
 class StageRefusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
-        fields = ['intitule', 'description', 'date_debut', 'date_fin',
-                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
-                  'remunere', 'remuneration', 'en_france', 'confidentiel', 'modalites_versements', 'avantage']
+        fields = ['etat', 'date_validation', 'raison_refus']
 
 
 class EtudiantSerializer(serializers.ModelSerializer):
