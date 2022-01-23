@@ -61,18 +61,30 @@ class StageSousReserveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['etat', 'remarque_reserve']
+        required_fields = ['remarque_reserve']
 
 
 class StageRefusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['etat', 'date_validation', 'raison_refus']
+        required_fields = ['raison_refus']
 
 
 class StageAttributionTuteurSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['etat', 'tuteur']
+        required_fields = ['tuteur']
+
+
+class StageScheduleDateDefenseSerializer(serializers.ModelSerializer):
+    date_soutenance = serializers.DateTimeField()
+
+    class Meta:
+        model = Stage
+        fields = ['date_soutenance']
+        required_fields = ['date_soutenance']
 
 
 class EtudiantSerializer(serializers.ModelSerializer):

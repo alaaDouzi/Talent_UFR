@@ -8,7 +8,7 @@ from etudiant.serializers import EtudiantSerializer
 from stage.models import Stage, Etat
 from ufr_st.models import Mot_cle, Etudiant, Tuteur
 from entreprise.models import Organisme_Accueil
-from .serializers import StageAttributionTuteurSerializer, StageSerializer, OrganismeAccueilSerializer, ProposeurStageSerializer, MaitreStageSerializer, MotCleSerializer, TuteurSerializer, StageValidateSerializer, StageRefusSerializer, StageSousReserveSerializer, EtudiantSerializer
+from .serializers import StageAttributionTuteurSerializer, StageSerializer, OrganismeAccueilSerializer, ProposeurStageSerializer, MaitreStageSerializer, MotCleSerializer, TuteurSerializer, StageValidateSerializer, StageRefusSerializer, StageSousReserveSerializer, EtudiantSerializer, StageScheduleDateDefenseSerializer
 
 
 @api_view(['GET'])
@@ -58,7 +58,7 @@ def stages(request):
 
 
 @api_view(['PUT'])
-def validate_stage(request, id):
+def validate_sujet(request, id):
     if request.method == 'PUT':
 
         try:
@@ -80,7 +80,7 @@ def validate_stage(request, id):
 
 
 @api_view(['PUT'])
-def refuser_stage(request, id):
+def refuser_sujet(request, id):
     if request.method == 'PUT':
         refus_data = request.data
 
@@ -106,7 +106,7 @@ def refuser_stage(request, id):
 
 
 @api_view(['PUT'])
-def sous_reserve_stage(request, id):
+def sous_reserve_sujet(request, id):
     if request.method == 'PUT':
         sous_reserve_data = request.data
 
@@ -131,6 +131,7 @@ def sous_reserve_stage(request, id):
 
 
 @api_view(['PUT'])
+# valider STAGER par la meme occasion
 def attribuer_tuteur(request, id):
     if request.method == 'PUT':
         stage_data = request.data
@@ -186,5 +187,29 @@ def get_etudiants(request):
         list_etudiant = Etudiant.objects.filter(**filters).all()
         serializer = EtudiantSerializer(list_etudiant, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+def programmer_date_soutenance(request, id):
+    # STAGE_EN_COURS
+    if request.method == 'PUT':
+        date_soutenance = request.data.get("date_soutenance")
+
+        try:
+            stage = Stage.objects.get(id=id)
+        except Stage.DoesNotExist:
+            error_message = f"Stage with id : {id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        stage_serializer = StageScheduleDateDefenseSerializer(
+            stage, data={"date_soutenance": date_soutenance})
+
+        if stage_serializer.is_valid():
+            stage_serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
