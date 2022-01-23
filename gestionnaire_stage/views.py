@@ -3,11 +3,12 @@ from rest_framework import status
 from datetime import datetime
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from etudiant.serializers import EtudiantSerializer
 # import request
 from stage.models import Stage, Etat
 from ufr_st.models import Mot_cle, Etudiant, Tuteur
 from entreprise.models import Organisme_Accueil
-from .serializers import StageAttributionTuteurSerializer, StageSerializer, OrganismeAccueilSerializer, ProposeurStageSerializer, MaitreStageSerializer, MotCleSerializer, TuteurSerializer, StageValidateSerializer, StageRefusSerializer, StageSousReserveSerializer
+from .serializers import StageAttributionTuteurSerializer, StageSerializer, OrganismeAccueilSerializer, ProposeurStageSerializer, MaitreStageSerializer, MotCleSerializer, TuteurSerializer, StageValidateSerializer, StageRefusSerializer, StageSousReserveSerializer, EtudiantSerializer
 
 
 @api_view(['GET'])
@@ -32,7 +33,7 @@ def stages(request):
         if mot_cle_query:
             filters['list_mot_cle__designation'] = mot_cle_query
         if filiere_query:
-            filters['etudiant__filiere'] = filiere_query
+            filters['etudiant__filiere__'] = filiere_query
 
         list_stage = Stage.objects.filter(**filters).all()
 
@@ -161,5 +162,29 @@ def attribuer_tuteur(request, id):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_etudiants(request):
+    if request.method == 'GET':
+        etudiant_id_query = request.query_params.get('etudiantId')
+        alumni_query = request.query_params.get(
+            'alumni')
+        filiere_query = request.query_params.get(
+            'filiere')
+        filters = {}
+
+        if etudiant_id_query:
+            filters['identifiant__startswith'] = etudiant_id_query
+        if alumni_query:
+            filters['alumni'] = alumni_query
+        if filiere_query:
+            filters['filiere'] = filiere_query
+
+        list_etudiant = Etudiant.objects.filter(**filters).all()
+        serializer = EtudiantSerializer(list_etudiant, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)

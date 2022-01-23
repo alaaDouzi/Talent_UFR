@@ -80,4 +80,4 @@ class EtudiantSerializer(serializers.ModelSerializer):
         model = Etudiant
         fields = ['identifiant', 'user', 'almuni_email', 'alumni', 'telephone',
                   'filiere', 'adresse', 'securite_sociale', 'num_securite_sociale',
-                  'compagnie_responsabilite_civile', 'num_responsabilite_civile', 'entreprise', 'user']
+                  'compagnie_responsabilite_civile', 'num_responsabilite_civile']
