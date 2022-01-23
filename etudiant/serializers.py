@@ -25,8 +25,14 @@ class StageUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['intitule', 'description', 'date_debut', 'date_fin',
-                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
+                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure', 'etat',
                   'remunere', 'remuneration', 'en_france', 'confidentiel', 'modalites_versements', 'avantage']
+
+
+class StageConfirmationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stage
+        fields = ['etat', 'date_confirmarion']
 
 
 class OrganismeAccueilSerializer(serializers.ModelSerializer):

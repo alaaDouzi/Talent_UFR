@@ -1,14 +1,13 @@
-from django.shortcuts import render
+from datetime import datetime
 from rest_framework import status
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.parsers import JSONParser
 # import request
 from stage.models import Stage, Etat
 from ufr_st.models import Mot_cle, Etudiant
 from entreprise.models import Organisme_Accueil
-from .serializers import StageSerializer, OrganismeAccueilSerializer, LieuSerializer, ResponsableAdministratifSerializer, ProposeurStageSerializer, MaitreStageSerializer, StageCreateSerializer, MotCleSerializer, TuteurSerializer, StageUpdateSerializer
+from .serializers import StageConfirmationSerializer, StageSerializer, OrganismeAccueilSerializer, LieuSerializer, ResponsableAdministratifSerializer, ProposeurStageSerializer, MaitreStageSerializer, StageCreateSerializer, MotCleSerializer, TuteurSerializer, StageUpdateSerializer
 # Create your views here.
 
 
@@ -180,7 +179,33 @@ def update_stage(request, id):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['PUT'])
+def confirme_stage(request, id):
+    if request.method == 'PUT':
+        etudiant_id = request.query_params.get("etudiantId")
+        # njibouh from cookies later
+
+        try:
+            stage = Stage.objects.get(id=id)
+        except Stage.DoesNotExist:
+            error_message = f"Stage with id : {id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        stage_serializer = StageConfirmationSerializer(
+            stage, data={"etat": Etat.SUJET_CONFIRME, "date_confirmarion": datetime.now()})
+
+        if stage_serializer.is_valid():
+            stage_serializer.save()
+            Stage.objects.filter(etudiant=etudiant_id, etat__in=[Etat.SUJET_BROUILLON, Etat.SUJET_EN_ATTENTE_VALIDATION, Etat.SUJET_SOUS_REVERVE, Etat.SUJET_VALIDE]).update(
+                etat=Etat.SUJET_ABANDONNE)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(stage_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@ api_view(['GET'])
 def my_stages(request):
     if request.method == 'GET':
         etat_query = request.query_params.get('etat')
