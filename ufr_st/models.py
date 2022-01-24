@@ -10,7 +10,8 @@ class Filiere(models.Model):
 
 class Mot_cle(models.Model):
     designation = models.TextField()
-    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE)
+    actif = models.BooleanField(default=True)
+    filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, null=True)
 
 
 class Tuteur(models.Model):
@@ -18,6 +19,7 @@ class Tuteur(models.Model):
     prenom = models.TextField()
     email = models.EmailField()
     telephone = models.TextField()
+    #telephone = models.TextField(null=True)
 
 
 class Etudiant(models.Model):

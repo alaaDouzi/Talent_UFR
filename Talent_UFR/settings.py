@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'stage',
     # api
     'etudiant',
-    'gestionnaire_stage'
+    'gestionnaire_stage',
+    'administrateur'
 ]
 
 MIDDLEWARE = [

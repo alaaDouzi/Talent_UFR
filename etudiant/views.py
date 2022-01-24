@@ -8,6 +8,8 @@ from stage.models import Stage, Etat
 from ufr_st.models import Mot_cle, Etudiant
 from entreprise.models import Organisme_Accueil
 from .serializers import StageConfirmationSerializer, StageSerializer, OrganismeAccueilSerializer, LieuSerializer, ResponsableAdministratifSerializer, ProposeurStageSerializer, MaitreStageSerializer, StageCreateSerializer, MotCleSerializer, TuteurSerializer, StageUpdateSerializer
+from django.db.models import Q
+
 # Create your views here.
 
 
