@@ -15,6 +15,7 @@ class Etat(models.TextChoices):
     SUJET_ABANDONNE = 'sujet abandonné',
     STAGE_VALIDE = 'stage validé',
     EN_COURS_DE_REALISATION_CONVENTION = 'En cours de réalisation de convetion',
+    STAGE_PRET = 'stage prêt à débuter',
     STAGE_EN_COURS = 'stage en cours',
     STAGE_ANNULE_PAR_ENTREPRISE = "stage annulé par l'entreprise",
     STAGE_TERMINE = 'stage terminé',
