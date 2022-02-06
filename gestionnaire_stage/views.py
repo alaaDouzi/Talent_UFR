@@ -33,7 +33,7 @@ def stages(request):
         if mot_cle_query:
             filters['list_mot_cle__designation'] = mot_cle_query
         if filiere_query:
-            filters['etudiant__filiere__'] = filiere_query
+            filters['etudiant__filiere'] = filiere_query
 
         list_stage = Stage.objects.filter(**filters).all()
 
@@ -60,7 +60,6 @@ def stages(request):
 @api_view(['PUT'])
 def validate_sujet(request, id):
     if request.method == 'PUT':
-
         try:
             stage = Stage.objects.get(id=id)
         except Stage.DoesNotExist:
@@ -153,6 +152,7 @@ def attribuer_tuteur(request, id):
             return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
 
         stage_data["etat"] = Etat.STAGE_VALIDE
+        stage_data["date_attribution_tuteur"] = datetime.now()
         stage_data["tuteur"] = tuteur_id
 
         stage_serializer = StageAttributionTuteurSerializer(
