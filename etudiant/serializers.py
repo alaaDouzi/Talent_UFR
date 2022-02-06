@@ -9,7 +9,7 @@ class StageSerializer(serializers.ModelSerializer):
         model = Stage
         fields = ['id', 'etat', 'intitule', 'description', 'date_debut', 'date_fin',
                   'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',
-                  'remunere', 'en_france', 'confidentiel', 'remuneration', 'modalites_versements', 'avantage', 'date_creation', 'date_validation', 'remarque_reserve',  'raison_refus', 'date_confirmarion', 'date_prise_en_charge_convention', 'date_annulation_entreprise', 'raison_annulation_entreprise', 'date_soutenance']
+                  'remunere', 'en_france', 'confidentiel', 'remuneration', 'modalites_versements', 'avantage', 'date_creation', 'date_validation', 'remarque_reserve',  'raison_refus', 'date_confirmarion', 'jours_travail', 'horraire_travail', 'date_prise_en_charge_convention', 'date_annulation_entreprise', 'raison_annulation_entreprise', 'date_soutenance']
 
 
 class StageCreateSerializer(serializers.ModelSerializer):
@@ -17,7 +17,7 @@ class StageCreateSerializer(serializers.ModelSerializer):
         model = Stage
         fields = ['id', 'intitule', 'description', 'date_debut', 'date_fin',
                   'date_debut_interruption', 'date_fin_interruption', 'nombre_heure',   'remunere', 'en_france', 'confidentiel',
-                  'remuneration', 'modalites_versements', 'avantage', 'entreprise',
+                  'remuneration', 'modalites_versements', 'avantage', 'entreprise', 'jours_travail', 'horraire_travail',
                   'representant_etablissement', 'maitre_stage', 'lieu', 'ayant_propose_stage', 'etudiant']
 
 
@@ -25,7 +25,7 @@ class StageUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
         fields = ['intitule', 'description', 'date_debut', 'date_fin',
-                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure', 'etat',
+                  'date_debut_interruption', 'date_fin_interruption', 'nombre_heure', 'etat', 'jours_travail', 'horraire_travail',
                   'remunere', 'remuneration', 'en_france', 'confidentiel', 'modalites_versements', 'avantage']
 
 
