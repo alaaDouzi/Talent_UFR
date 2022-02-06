@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.http import FileResponse
 from rest_framework import status
 from django.db import transaction
 from rest_framework.decorators import api_view
@@ -253,6 +254,27 @@ def my_stages(request):
                 element["tuteur"] = TuteurSerializer(stage.tuteur).data
             response.append(element)
         return Response(response, status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_convention(request, id):
+    if request.method == 'GET':
+        # njibouh from cookies later
+        etudiant_id_query = request.query_params.get('etudiantId')
+        try:
+            stage = Stage.objects.get(id=id)
+        except Stage.DoesNotExist:
+            error_message = f"Stage with id : {id} doesn\'t exist"
+            return Response({"message": error_message}, status=status.HTTP_404_NOT_FOUND)
+
+        if etudiant_id_query == None or stage.etudiant.identifiant != etudiant_id_query:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        convention = stage.convention.open()
+        response = FileResponse(convention)
+        return response
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
