@@ -18,7 +18,8 @@ class Etat(models.TextChoices):
     STAGE_PRET = 'stage prêt à débuter',
     STAGE_EN_COURS = 'stage en cours',
     STAGE_ANNULE_PAR_ENTREPRISE = "stage annulé par l'entreprise",
-    STAGE_TERMINE = 'stage terminé',
+    STAGE_TERMINE = 'stage terminé',  # arrivé à date_fin
+    STAGE_CLOTURE = 'stage cloturé',  # arrivé à date_fin + soutenance effectuée
     STAGE_ARCHIVE = 'stage archivé',
 
 
@@ -29,26 +30,32 @@ class Modalites_versements(models.TextChoices):
     NON_CONNU = 'Non connu',
 
 
+class Session_soutenance(models.TextChoices):
+    SEPTEMBRE = 'septembre'
+    JUIN = 'juin'
+
+
 class Stage(models.Model):
     etat = models.CharField(
-        max_length=45, choices=Etat.choices, default=Etat.SUJET_BROUILLON)
+        max_length=45, choices=Etat.choices, default=Etat.SUJET_EN_ATTENTE_VALIDATION)
     intitule = models.TextField()  # sujet stage
     description = models.TextField()
-    documents_sup = models.FileField(null=True)
+#    documents_sup = models.FileField(null=True)
     date_debut = models.DateField()
-    date_fin = models.DateField(null=True)
-    # Jours et horaires de travail
+    date_fin = models.DateField()
+    jours_travail = models.TextField()
+    horraire_travail = models.TextField()
     date_debut_interruption = models.DateField(null=True)
     date_fin_interruption = models.DateField(null=True)
     nombre_heure = models.IntegerField()  # nombre_heure par semaine
     remunere = models.BooleanField()
     en_france = models.BooleanField(default=True)
     confidentiel = models.BooleanField(default=False)
-    remuneration = models.IntegerField(null=True)
+    remuneration = models.IntegerField()
     modalites_versements = models.CharField(
         max_length=15, choices=Modalites_versements.choices, default=Modalites_versements.NON_CONNU)
     avantage = models.TextField(blank=True)
-
+    # lu et accepte text lois
     date_creation = models.DateTimeField(default=timezone.now)
 
     date_validation = models.DateTimeField(null=True)
@@ -57,13 +64,19 @@ class Stage(models.Model):
 
     date_confirmarion = models.DateTimeField(null=True)
 
+    date_attribution_tuteur = models.DateTimeField(null=True)
+
     date_prise_en_charge_convention = models.DateTimeField(null=True)
 
+    # might be better to change it to an URL to drive or something like that
+    convention = models.FileField(null=True, upload_to='uploads/')
+    data_ajout_convention = models.DateTimeField(null=True)
+
     date_annulation_entreprise = models.DateTimeField(null=True)
-    raison_annulation_entreprise = models.DateTimeField(null=True)
+    raison_annulation_entreprise = models.TextField(null=True)
 
     date_soutenance = models.DateTimeField(null=True)
-    # session soutenance
+    soutenance_effectuee = models.BooleanField(default=False)
 
     date_archive = models.DateTimeField(null=True)
 
